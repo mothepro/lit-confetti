@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "index.ts",
+    "demo/index.ts"
+  ],
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es2019",
+    "outDir": "dist/esm"
+  }
+}

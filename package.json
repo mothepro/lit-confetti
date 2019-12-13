@@ -1,0 +1,46 @@
+{
+  "name": "lit-confetti",
+  "description": "Confetti animation as a web component",
+  "author": "Maurice Prosper",
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "main": "dist/npm/index.js",
+  "sideEffects": false,
+  "type": "module",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "repository": "https://github.com/mothepro/lit-confetti",
+  "scripts": {
+    "build": "npm run build:npm && npm run build:esm",
+    "pretest": "npm run build:npm",
+    "test": "mocha -r should -r should-sinon dist/test/*.js",
+    "prerelease": "npm run build:npm && npm run deploy",
+    "release": "np",
+    "map:dev": "importly --host node_modules < package.json > dist/demo/import-map.json",
+    "map:prod": "importly --host unpkg < package.json > dist/demo/import-map.json",
+    "prebuild:esm": "copy demo/index.html dist",
+    "build:esm:dev": "npm run map:dev && npm run build:esm",
+    "build:esm:prod": "npm run map:prod && npm run build:esm",
+    "predeploy": "npm run build:prod",
+    "deploy": "gh-pages -d dist/demo",
+    "build:npm": "tsc",
+    "build:esm": "tsc -p tsconfig.esm.json"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/should-sinon": "^0.0.5",
+    "gh-pages": "^2.1.1",
+    "importly": "^0.1.0-dev.0",
+    "mocha": "^6.2.2",
+    "np": "^5.2.1",
+    "should": "^13.2.3",
+    "should-sinon": "^0.0.6",
+    "sinon": "^7.5.0",
+    "typescript": "^3.7.3"
+  },
+  "dependencies": {
+    "lit-element": "^2.2.1"
+  }
+}
