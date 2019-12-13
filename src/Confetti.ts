@@ -1,6 +1,6 @@
 import { LitElement, html, property, customElement, css } from 'lit-element'
-import Particle from './src/Particle.js'
-import random from './src/random.js'
+import Particle from './Particle.js'
+import random from './random.js'
 
 @customElement('lit-confetti')
 export default class extends LitElement {
