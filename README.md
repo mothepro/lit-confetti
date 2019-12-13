@@ -1,6 +1,6 @@
-# Lit Confetti
+# Lit Confetti - [Demo](https://mothepro.github.io/lit-confetti/)
 
-> Confetti\
+> Confetti animation as a web component
 
 ## Install
 
@@ -8,4 +8,12 @@
 
 ## How to Use
 
+```html
+<script type="module" src="https://unpkg.com/lit-confetti/dist/esm/index.js"></script>
+<!-- ... -->
+<lit-confetti></lit-confetti>
+```
+
 TODO...
+
++ Handle z-index better
