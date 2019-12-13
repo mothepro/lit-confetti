@@ -13,20 +13,24 @@
   ],
   "repository": "https://github.com/mothepro/lit-confetti",
   "scripts": {
-    "build": "npm run build:npm && npm run build:esm",
     "pretest": "npm run build:npm",
     "test": "mocha -r should -r should-sinon dist/test/*.js",
+    "predeploy": "npm run build:prod",
+    "deploy": "gh-pages -d dist/demo",
     "prerelease": "npm run build:npm && npm run deploy",
     "release": "np",
     "map:dev": "importly --host node_modules < package.json > dist/demo/import-map.json",
+    "win:map:dev": "type package.json | importly --host node_modules > dist/demo/import-map.json",
     "map:prod": "importly --host unpkg < package.json > dist/demo/import-map.json",
+    "win:map:prod": "type package.json | importly --host unpkg > dist/demo/import-map.json",
     "prebuild:esm": "copy demo/index.html dist",
     "build:esm:dev": "npm run map:dev && npm run build:esm",
+    "win:build:esm:dev": "npm run win:map:dev && npm run build:esm",
     "build:esm:prod": "npm run map:prod && npm run build:esm",
-    "predeploy": "npm run build:prod",
-    "deploy": "gh-pages -d dist/demo",
+    "win:build:esm:prod": "npm run win:map:prod && npm run build:esm",
+    "build:esm": "tsc -p tsconfig.esm.json",
     "build:npm": "tsc",
-    "build:esm": "tsc -p tsconfig.esm.json"
+    "build": "npm run build:npm && npm run build:esm"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
