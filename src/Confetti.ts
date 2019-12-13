@@ -24,7 +24,6 @@ export default class extends LitElement {
     left: 0;
     bottom: 0;
     right: 0;
-    /* z-index:  */
   }
   `
 
@@ -50,10 +49,10 @@ export default class extends LitElement {
   }
 
   firstUpdated() {
+    addEventListener('resize', this.resized)
     this.resized()
     this.context = this.canvas.getContext('2d')!
     requestAnimationFrame(this.draw)
-    window.onresize = () => console.log(this.scrollWidth, this.scrollHeight)
   }
 
   resized = () => {
