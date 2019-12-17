@@ -5,10 +5,10 @@ import random from './random.js'
 @customElement('lit-confetti')
 export default class extends LitElement {
   @property({ type: Number })
-  speed = 25
+  gravity = 100
 
   @property({ type: Number })
-  count = Math.floor((this.scrollHeight * this.scrollWidth) ** 0.33)
+  count!: number
 
   @property({ type: Boolean })
   gradient = false
@@ -16,17 +16,17 @@ export default class extends LitElement {
   @property({ type: Array })
   colors = [
     { "red": 107, "green": 142, "blue": 35, },
-    { "red": 255, "green": 192, "blue": 20, },
-    { "red": 173, "green": 216, "blue": 23, },
-    { "red": 238, "green": 130, "blue": 23, },
-    { "red": 152, "green": 251, "blue": 15, },
+    { "red": 255, "green": 192, "blue": 203, },
+    { "red": 173, "green": 216, "blue": 230, },
+    { "red": 238, "green": 130, "blue": 238, },
+    { "red": 152, "green": 251, "blue": 152, },
     { "red": 244, "green": 164, "blue": 96, },
     { "red": 210, "green": 105, "blue": 30, },
     { "red": 255, "green": 215, "blue": 0, },
-    { "red": 106, "green": 90, "blue": 20, },
+    { "red": 106, "green": 90, "blue": 205, },
     { "red": 220, "green": 20, "blue": 60, },
-    { "red": 30, "green": 144, "blue": 25, },
-    { "red": 70, "green": 130, "blue": 18, },
+    { "red": 30, "green": 144, "blue": 255, },
+    { "red": 70, "green": 130, "blue": 180, },
   ]
 
   private get canvas() { return this.shadowRoot?.getElementById('confetti') as HTMLCanvasElement }
@@ -46,14 +46,29 @@ export default class extends LitElement {
   }
   `
 
-  render = () => html`<canvas id="confetti"></canvas>`
+  protected render = () => html`<canvas id="confetti"></canvas>`
 
-  draw = () => {
+  protected firstUpdated() {
+    // This can't be done in constructor since the size isn't determined yet.
+    if (typeof this.count == 'undefined' || Number.isNaN(this.count))
+      this.count = Math.floor((this.scrollHeight * this.scrollWidth) ** 0.33)
+    addEventListener('resize', this.resized)
+    this.resized()
+    this.context = this.canvas.getContext('2d')!
+    requestAnimationFrame(this.draw)
+  }
+
+  protected updated(oldProps: Map<string, any>) {
+    // Restart the rAF if we are now rendering particles again.
+    if (oldProps.get('count') === 0)
+      requestAnimationFrame(this.draw)
+  }
+
+  private draw = () => {
     this.context.clearRect(0, 0, this.scrollWidth, this.scrollHeight)
 
     for (const particle of this.particles) {
-      particle.draw(this.context!)
-      particle.update(this.speed)
+      particle.drawAndUpdate(this.gravity)
       if (!this.isVisible(particle))
         this.particles.delete(particle)
     }
@@ -61,50 +76,32 @@ export default class extends LitElement {
     // Refill the particles set
     for (let i = this.particles.size; i < this.count; i++)
       this.particles.add(new Particle(
+        this.context,
         random(this.scrollWidth),
         -random(this.scrollHeight, 50),
         this.getRandomStyle(random(1, 0.5))
       ))
 
-    Particle.waveAngle += 0.001
+    Particle.waveAngle += 0.01
     if (this.particles.size)
       requestAnimationFrame(this.draw)
   }
 
-  protected firstUpdated() {
-    addEventListener('resize', this.resized)
-    this.resized()
-    this.context = this.canvas.getContext('2d')!
-    requestAnimationFrame(this.draw)
-  }
-
-  protected resized = () => {
+  private resized = () => {
     this.canvas.width = this.scrollWidth
     this.canvas.height = this.scrollHeight
   }
 
-  protected updated(oldProps: Map<string, any>) {
-    // Restart the rAF if we are now rendering particles again.
-    if (!oldProps.get('count'))
-      requestAnimationFrame(this.draw)
-  }
-
-  protected isVisible = (particle: Particle) =>
+  private isVisible = (particle: Particle) =>
     particle.y < this.scrollHeight + particle.radius
     && particle.x > -particle.radius
     && particle.x < this.scrollWidth + particle.radius
 
-  protected getRandomStyle(opacity: number): string | CanvasGradient {
-    if (this.gradient) {
-      const gradient = this.context.createLinearGradient(x, particle.y, x2, y2)
-      gradient.addColorStop(0, this.getRandomColor(opacity))
-      gradient.addColorStop(1, this.getRandomColor(opacity))
-      return gradient
-    } else
-      return this.getRandomColor(opacity)
-  }
+  private getRandomStyle = (opacity: number) =>
+    [...Array(+this.gradient + 1)]
+      .map(() => this.getRandomColor(opacity)) as [string] | [string, string]
 
-  protected getRandomColor(opacity: number) {
+  private getRandomColor(opacity: number) {
     const { red, green, blue } = this.colors[Math.floor(random(this.colors.length))]
     return `rgba(${red}, ${green}, ${blue}, ${opacity})`
   }
