@@ -5,7 +5,7 @@ import random from './random.js'
 @customElement('lit-confetti')
 export default class extends LitElement {
   @property({ type: Number })
-  gravity = 100
+  gravity = 1
 
   @property({ type: Number })
   count!: number
@@ -59,6 +59,9 @@ export default class extends LitElement {
   }
 
   protected updated(oldProps: Map<string, any>) {
+    // Show black confetti if non is given
+    if (!this.colors.length)
+      this.colors.push({'red': 0, 'blue': 0, 'green': 0})
     // Restart the rAF if we are now rendering particles again.
     if (oldProps.get('count') === 0)
       requestAnimationFrame(this.draw)

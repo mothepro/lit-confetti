@@ -42,7 +42,7 @@ export default class Particle {
 
     // Move the particle depending on wind and gravity.
     this.x += 0.1 * (Math.sin(Particle.waveAngle) - 0.5)
-    this.y += 0.01 * gravity * this.radius
+    this.y += gravity * this.radius
     this.tilt = Math.sin(this.angles.next().value) * Particle.maxTilt
   }
 }
