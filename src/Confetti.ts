@@ -8,7 +8,7 @@ export default class extends LitElement {
   gravity = 1
 
   @property({ type: Number })
-  count!: number
+  count = 0
 
   @property({ type: Boolean })
   gradient = false
@@ -46,7 +46,11 @@ export default class extends LitElement {
   }
   `
 
-  protected render = () => html`<canvas id="confetti"></canvas>`
+  protected render = () =>
+    html`<canvas id="confetti"></canvas>`
+  
+  // The dom never actually needs to be changed.
+  protected shouldUpdate = () => false
 
   protected firstUpdated() {
     // This can't be done in constructor since the size isn't determined yet.
@@ -65,6 +69,9 @@ export default class extends LitElement {
     // Restart the rAF if we are now rendering particles again.
     if (oldProps.get('count') === 0)
       requestAnimationFrame(this.draw)
+    // Gradient isn't possible with 1 color
+    if (oldProps.has('colors') && this.colors.length < 2)
+      this.gradient = false
   }
 
   private draw = () => {
