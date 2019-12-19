@@ -35,6 +35,8 @@ export default class extends LitElement {
 
   private context!: CanvasRenderingContext2D
 
+  private rerenderNeeded = true
+
   static readonly styles = css`
   :host {
     pointer-events: none;
@@ -46,19 +48,28 @@ export default class extends LitElement {
   }
   `
 
-  protected render = () =>
-    html`<canvas id="confetti"></canvas>`
+  protected readonly render = () => html`
+    <canvas 
+      id="confetti"
+      width=${this.clientWidth}
+      height=${this.clientHeight}
+    ></canvas>
+  `
   
   // The dom never actually needs to be changed.
-  protected shouldUpdate = () => false
+  protected readonly shouldUpdate = () => this.rerenderNeeded
 
   protected firstUpdated() {
+    this.context = this.canvas.getContext('2d')!
+    // update size of canvas
+    addEventListener('resize', async () => {
+      this.rerenderNeeded = true
+      await this.requestUpdate()
+      this.rerenderNeeded = false
+    })
     // This can't be done in constructor since the size isn't determined yet.
     if (typeof this.count == 'undefined' || Number.isNaN(this.count))
       this.count = Math.floor((this.scrollHeight * this.scrollWidth) ** 0.33)
-    addEventListener('resize', this.resized)
-    this.resized()
-    this.context = this.canvas.getContext('2d')!
     requestAnimationFrame(this.draw)
   }
 
@@ -95,11 +106,6 @@ export default class extends LitElement {
     Particle.waveAngle += 0.01
     if (this.particles.size)
       requestAnimationFrame(this.draw)
-  }
-
-  private resized = () => {
-    this.canvas.width = this.scrollWidth
-    this.canvas.height = this.scrollHeight
   }
 
   private isVisible = (particle: Particle) =>
