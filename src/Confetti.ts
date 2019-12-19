@@ -72,12 +72,10 @@ export default class extends LitElement {
       await this.requestUpdate()
       this.rerenderNeeded = false
     })
-
-    requestAnimationFrame(this.draw)
   }
 
   protected updated(oldProps: Map<string, any>) {
-    // Restart the rAF if we are now rendering particles again.
+    // (Re)start rAF if we had no particles before and the count was unset (or 0).
     if (oldProps.has('count') && !oldProps.get('count') && this.particles.size == 0)
       requestAnimationFrame(this.draw)
 
