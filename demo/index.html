@@ -33,14 +33,11 @@
 
 <body>
   <h1>Check out this stylish confetti!</h1>
-  <confetti-controller 
-    gravity=1
-    count=100
-    colors='["#6b8e23", "#ffc0cb", "#add8e6", "#ee82ee", "#98fb98", "#f4a460", "#d2691e", "#ffd700", "#6a5acd", "#dc143c", "#1e90ff", "#4682b4"]'
-  ></confetti-controller>
-  <div class=offshoot>
-    <confetti-controller></confetti-controller>
-  </div>
+  <confetti-controller gravity=1 count=100></confetti-controller>
+  <confetti-controller
+    class="offshoot"
+    colors='["#6b8e23", "#ffc0cb", "#add8e6", "#ee82ee", "#98fb98", "#f4a460", "#d2691e", "#ffd700", "#6a5acd", "#dc143c", "#1e90ff", "#4682b4"]'>
+  </confetti-controller>
 </body>
 
 </html>
