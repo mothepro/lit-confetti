@@ -69,7 +69,7 @@ export default class extends LitElement {
     })
     // This can't be done in constructor since the size isn't determined yet.
     if (typeof this.count == 'undefined' || Number.isNaN(this.count))
-      this.count = Math.floor((this.scrollHeight * this.scrollWidth) ** 0.33)
+      this.count = Math.floor((this.clientHeight * this.clientWidth) ** 0.33)
     requestAnimationFrame(this.draw)
   }
 
@@ -78,7 +78,7 @@ export default class extends LitElement {
     if (!this.colors.length)
       this.colors.push({'red': 0, 'blue': 0, 'green': 0})
     // Restart the rAF if we are now rendering particles again.
-    if (oldProps.get('count') === 0)
+    if (oldProps.get('count') == 0 && this.particles.size == 0)
       requestAnimationFrame(this.draw)
     // Gradient isn't possible with 1 color
     if (oldProps.has('colors') && this.colors.length < 2)
@@ -86,7 +86,7 @@ export default class extends LitElement {
   }
 
   private draw = () => {
-    this.context.clearRect(0, 0, this.scrollWidth, this.scrollHeight)
+    this.context.clearRect(0, 0, this.clientWidth, this.clientHeight)
 
     for (const particle of this.particles) {
       particle.drawAndUpdate(this.gravity)
@@ -98,8 +98,8 @@ export default class extends LitElement {
     for (let i = this.particles.size; i < this.count; i++)
       this.particles.add(new Particle(
         this.context,
-        random(this.scrollWidth),
-        -random(this.scrollHeight, 50),
+        random(this.clientWidth),
+        -random(this.clientHeight / 3, 50),
         this.getRandomStyle(random(1, 0.5))
       ))
 
@@ -109,9 +109,9 @@ export default class extends LitElement {
   }
 
   private isVisible = (particle: Particle) =>
-    particle.y < this.scrollHeight + particle.radius
-    && particle.x > -particle.radius
-    && particle.x < this.scrollWidth + particle.radius
+    particle.y - 2 * particle.radius < this.clientHeight 
+    && particle.x + 2 * particle.radius > 0
+    && particle.x - 2 * particle.radius < this.clientWidth
 
   private getRandomStyle = (opacity: number) =>
     [...Array(+this.gradient + 1)]
