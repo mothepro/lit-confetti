@@ -73,16 +73,12 @@ export default class extends LitElement {
       this.rerenderNeeded = false
     })
 
-    // This can't be done in constructor since the size isn't determined yet.
-    if (typeof this.count == 'undefined' || Number.isNaN(this.count))
-      this.count = Math.floor((this.clientHeight * this.clientWidth) ** 0.33)
-
     requestAnimationFrame(this.draw)
   }
 
   protected updated(oldProps: Map<string, any>) {
     // Restart the rAF if we are now rendering particles again.
-    if (oldProps.get('count') == 0 && this.particles.size == 0)
+    if (oldProps.has('count') && !oldProps.get('count') && this.particles.size == 0)
       requestAnimationFrame(this.draw)
 
     // Gradient isn't possible with 1 color
