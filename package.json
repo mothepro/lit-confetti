@@ -15,8 +15,8 @@
   "scripts": {
     "test": "echo 'no tests'",
     "copydemo": "copyfiles demo/* dist/",
-    "html:importmap": "replace 'import-map.dev.json' 'import-map.prod.json' dist/demo/index.html",
-    "html:js": "replace '../dist/demo/index.js' 'index.js' dist/demo/index.html",
+    "html:importmap": "replace import-map.dev.json import-map.prod.json dist/demo/index.html",
+    "html:js": "replace ../dist/demo/index.js index.js dist/demo/index.html",
     "predeploy": "npm run build:esm && npm run build:demo",
     "deploy": "gh-pages -d dist/demo",
     "prerelease": "npm run build:npm && npm run deploy",
