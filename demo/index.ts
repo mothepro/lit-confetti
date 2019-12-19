@@ -15,13 +15,14 @@ export default class extends LitElement {
   private count!: number
 
   @property({ type: Array })
-  private colors = ["#6b8e23", "#ffc0cb", "#add8e6", "#ee82ee", "#98fb98", "#f4a460", "#d2691e", "#ffd700", "#6a5acd", "#dc143c", "#1e90ff", "#4682b4"]
+  private colors: string[] = []
 
   protected render = () => html`
     Gradient <input
       type=checkbox
       @change=${({ target }: HTMLEvent) => this.gradient = target.checked}
       ?checked=${this.gradient}
+      ?disabled=${this.colors.length < 2}
     /><br/>
 
     Gravity <input
@@ -65,5 +66,5 @@ export default class extends LitElement {
         blue:  parseInt(hex[5] + hex[6], 16),
       }))}
     ></lit-confetti>
-    `
+  `
 }

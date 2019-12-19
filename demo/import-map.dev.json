@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "lit-element/": "/node_modules/lit-element/",
+    "lit-element": "/node_modules/lit-element/lit-element.js",
+    "lit-html/": "/node_modules/lit-html/",
+    "lit-html": "/node_modules/lit-html/lit-html.js",
+    "lit-confetti": "../dist/esm/index.js"
+  }
+}

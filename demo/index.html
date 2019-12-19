@@ -7,15 +7,20 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Lit Confetti Demo</title>
   <script type="module" src="https://unpkg.com/es-module-shims@0.4.6/dist/es-module-shims.min.js?module"></script>
-  <script type="importmap-shim" src="import-map.json"></script>
-  <script type="module-shim" src="../dist/esm/demo/index.js"></script>
+  <script type="importmap-shim" src="import-map.dev.json"></script>
+  <script type="module-shim" src="../dist/demo/index.js"></script>
   <style>
+    body {
+      background-color: aliceblue;
+    }
+
     h1 {
       text-align: center
     }
 
     .offshoot {
       border: thin solid black;
+      background-color: rgba(255, 255, 255, 0.75);
       position: absolute;
       right: 50px;
       top: 150px;
@@ -28,9 +33,13 @@
 
 <body>
   <h1>Check out this stylish confetti!</h1>
-  <confetti-controller gravity=1 count=100></confetti-controller>
+  <confetti-controller 
+    gravity=1
+    count=100
+    colors='["#6b8e23", "#ffc0cb", "#add8e6", "#ee82ee", "#98fb98", "#f4a460", "#d2691e", "#ffd700", "#6a5acd", "#dc143c", "#1e90ff", "#4682b4"]'
+  ></confetti-controller>
   <div class=offshoot>
-    <confetti-controller gravity=1 count=0></confetti-controller>
+    <confetti-controller></confetti-controller>
   </div>
 </body>
 

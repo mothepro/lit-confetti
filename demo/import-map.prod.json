@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "lit-element/": "//unpkg.com/lit-element@2.2.1/",
+    "lit-element": "//unpkg.com/lit-element@2.2.1/lit-element.js",
+    "lit-html/": "//unpkg.com/lit-html@1.1.2/",
+    "lit-html": "//unpkg.com/lit-html@1.1.2/lit-html.js",
+    "lit-confetti": "//unpkg.com/lit-confetti/dist/esm/index.js"
+  }
+}
