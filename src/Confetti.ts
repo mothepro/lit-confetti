@@ -1,6 +1,8 @@
 import { LitElement, html, property, customElement, css } from 'lit-element'
 import Particle from './Particle.js'
 import random from './random.js'
+import hslToColor from './hslToColor.js'
+import colorToString from './colorToString.js'
 
 @customElement('lit-confetti')
 export default class extends LitElement {
@@ -37,6 +39,8 @@ export default class extends LitElement {
 
   private rerenderNeeded = true
 
+  private nextRainbowHue = 0
+
   static readonly styles = css`
   :host {
     pointer-events: none;
@@ -55,31 +59,32 @@ export default class extends LitElement {
       height=${this.clientHeight}
     ></canvas>
   `
-  
+
   // The dom never actually needs to be changed.
   protected readonly shouldUpdate = () => this.rerenderNeeded
 
   protected firstUpdated() {
     this.context = this.canvas.getContext('2d')!
+
     // update size of canvas
     addEventListener('resize', async () => {
       this.rerenderNeeded = true
       await this.requestUpdate()
       this.rerenderNeeded = false
     })
+
     // This can't be done in constructor since the size isn't determined yet.
     if (typeof this.count == 'undefined' || Number.isNaN(this.count))
       this.count = Math.floor((this.clientHeight * this.clientWidth) ** 0.33)
+
     requestAnimationFrame(this.draw)
   }
 
   protected updated(oldProps: Map<string, any>) {
-    // Show black confetti if non is given
-    if (!this.colors.length)
-      this.colors.push({'red': 0, 'blue': 0, 'green': 0})
     // Restart the rAF if we are now rendering particles again.
     if (oldProps.get('count') == 0 && this.particles.size == 0)
       requestAnimationFrame(this.draw)
+
     // Gradient isn't possible with 1 color
     if (oldProps.has('colors') && this.colors.length < 2)
       this.gradient = false
@@ -100,7 +105,12 @@ export default class extends LitElement {
         this.context,
         random(this.clientWidth),
         -random(this.clientHeight / 3, 50),
-        this.getRandomStyle(random(1, 0.5))
+        // Show rainbow confetti if non is given
+        this.colors.length
+          ? this.getRandomStyle(random(1, 0.5))
+          : [colorToString(
+              hslToColor(this.nextRainbowHue++),
+              random(1, 0.5))]
       ))
 
     Particle.waveAngle += 0.01
@@ -109,7 +119,7 @@ export default class extends LitElement {
   }
 
   private isVisible = (particle: Particle) =>
-    particle.y - 2 * particle.radius < this.clientHeight 
+    particle.y - 2 * particle.radius < this.clientHeight
     && particle.x + 2 * particle.radius > 0
     && particle.x - 2 * particle.radius < this.clientWidth
 
@@ -117,8 +127,8 @@ export default class extends LitElement {
     [...Array(+this.gradient + 1)]
       .map(() => this.getRandomColor(opacity)) as [string] | [string, string]
 
-  private getRandomColor(opacity: number) {
-    const { red, green, blue } = this.colors[Math.floor(random(this.colors.length))]
-    return `rgba(${red}, ${green}, ${blue}, ${opacity})`
-  }
+  private getRandomColor = (opacity: number) =>
+    colorToString(
+      this.colors[Math.floor(random(this.colors.length))],
+      opacity)
 }
