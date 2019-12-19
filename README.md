@@ -10,24 +10,18 @@
 
 ```html
 <script type="module" src="https://unpkg.com/lit-confetti/dist/esm/index.js"></script>
-<!-- ... -->
+
 <lit-confetti
   gravity=1
   count=100
   gradient
-  colors='[
-    { "red": 255, "green": 192, "blue": 203, },
-    { "red": 173, "green": 216, "blue": 230, },
-    { "red": 238, "green": 130, "blue": 238, },
-    { "red": 152, "green": 251, "blue": 152, },
-    { "red": 244, "green": 164, "blue": 96, },
-    { "red": 107, "green": 142, "blue": 35, },
-    { "red": 210, "green": 105, "blue": 30, },
-    { "red": 255, "green": 215, "blue": 0, },
-    { "red": 220, "green": 20, "blue": 60, },
-    { "red": 106, "green": 90, "blue": 205, },
-    { "red": 30, "green": 144, "blue": 255, },
-    { "red": 70, "green": 130, "blue": 180, }
-  ]'
+  colors='["#6b8e23", "#ffc0cb", "#add8e6", "#ee82ee", "#98fb98", "#f4a460", "#d2691e", "#ffd700", "#6a5acd", "#dc143c", "#1e90ff", "#4682b4"]'
 ></lit-confetti>
 ```
+
+| Attribute | Type | Description |
+| --------- | ---- | ----------- |
+| `gravity` | `number` | How fast the confetti papers fall |
+| `count` | `number` | Limit for the max amount of confetti papers to create at once |
+| `gradient` | `boolean` | Confetti papers will have a gradient between 2 colors set |
+| `colors` | `string[]`<br/> (`#RRGGBB` color format) |  Possible colors to choose from when generating a confetti paper.  *Rainbow colors by default.* |

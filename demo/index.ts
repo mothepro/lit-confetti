@@ -34,7 +34,7 @@ export default class extends LitElement {
       step=0.1
     /><br/>
 
-    Amount of Confetti <input
+    Amount <input
       type=number
       @input=${({ target }: HTMLEvent) => this.count = parseFloat(target.value) || 0}
       value=${this.count}
@@ -60,11 +60,7 @@ export default class extends LitElement {
       gravity=${this.gravity}
       count=${this.count}
       ?gradient=${this.gradient}
-      .colors=${this.colors.map(hex => ({
-        red:   parseInt(hex[1] + hex[2], 16),
-        green: parseInt(hex[3] + hex[4], 16),
-        blue:  parseInt(hex[5] + hex[6], 16),
-      }))}
+      .colors=${this.colors}
     ></lit-confetti>
   `
 }

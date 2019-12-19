@@ -1,8 +1,6 @@
 import { LitElement, html, property, customElement, css } from 'lit-element'
 import Particle from './Particle.js'
 import random from './random.js'
-import hslToColor from './hslToColor.js'
-import colorToString from './colorToString.js'
 
 @customElement('lit-confetti')
 export default class extends LitElement {
@@ -16,20 +14,7 @@ export default class extends LitElement {
   gradient = false
 
   @property({ type: Array })
-  colors = [
-    { "red": 255, "green": 192, "blue": 203, },
-    { "red": 173, "green": 216, "blue": 230, },
-    { "red": 238, "green": 130, "blue": 238, },
-    { "red": 152, "green": 251, "blue": 152, },
-    { "red": 107, "green": 142, "blue": 35, },
-    { "red": 244, "green": 164, "blue": 96, },
-    { "red": 210, "green": 105, "blue": 30, },
-    { "red": 255, "green": 215, "blue": 0, },
-    { "red": 220, "green": 20, "blue": 60, },
-    { "red": 106, "green": 90, "blue": 205, },
-    { "red": 30, "green": 144, "blue": 255, },
-    { "red": 70, "green": 130, "blue": 180, },
-  ]
+  colors: string[] = []
 
   private get canvas() { return this.shadowRoot?.getElementById('confetti') as HTMLCanvasElement }
 
@@ -102,9 +87,7 @@ export default class extends LitElement {
         // Show rainbow confetti if non is given
         this.colors.length
           ? this.getRandomStyle(random(1, 0.5))
-          : [colorToString(
-              hslToColor(this.nextRainbowHue++),
-              random(1, 0.5))]
+          : [`hsla(${this.nextRainbowHue++ % 360}, 1, .5, ${random(1, 0.75)})`]
       ))
 
     Particle.waveAngle += 0.01
@@ -121,8 +104,12 @@ export default class extends LitElement {
     [...Array(+this.gradient + 1)]
       .map(() => this.getRandomColor(opacity)) as [string] | [string, string]
 
-  private getRandomColor = (opacity: number) =>
-    colorToString(
-      this.colors[Math.floor(random(this.colors.length))],
-      opacity)
+  private getRandomColor = (opacity: number) => {
+    const randomColor = this.colors[Math.floor(random(this.colors.length))]
+    return `rgba(${
+      parseInt(randomColor.slice(1, 3), 16)}, ${
+      parseInt(randomColor.slice(3, 5), 16)}, ${
+      parseInt(randomColor.slice(5, 7), 16)}, ${
+      opacity})`
+  }
 }
