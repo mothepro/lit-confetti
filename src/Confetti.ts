@@ -13,6 +13,9 @@ export default class extends LitElement {
   @property({ type: Boolean })
   gradient = false
 
+  @property({ type: Boolean })
+  hidden = false
+
   @property({ type: Array })
   colors: string[] = []
 
@@ -27,6 +30,9 @@ export default class extends LitElement {
   private nextRainbowHue = 0
 
   static readonly styles = css`
+  :host[hidden] {
+    display: none
+  }
   :host {
     pointer-events: none;
     position: absolute;
@@ -43,6 +49,7 @@ export default class extends LitElement {
       width=${this.clientWidth}
       height=${this.clientHeight}
     ></canvas>
+    <slot></slot>
   `
 
   // The dom never actually needs to be changed.
@@ -60,9 +67,9 @@ export default class extends LitElement {
   }
 
   protected updated(oldProps: Map<string, any>) {
-    // (Re)start rAF if we had no particles before and the count was unset (or 0).
-    if (oldProps.has('count') && !oldProps.get('count') && this.particles.size == 0)
-      requestAnimationFrame(this.draw)
+    // Start drawing if we are no longer hidden OR had no particles before and the count was unset (or 0).
+    if (oldProps.get('hidden') || (oldProps.has('count') && !oldProps.get('count') && !this.particles.size))
+      this.draw()
 
     // Gradient isn't possible with 1 color
     if (oldProps.has('colors') && this.colors.length < 2)
@@ -72,26 +79,26 @@ export default class extends LitElement {
   private draw = () => {
     this.context.clearRect(0, 0, this.clientWidth, this.clientHeight)
 
+    // Refill particles
+    for (let i = this.particles.size; i < this.count; i++)
+      this.particles.add(new Particle(
+        this.context,
+        random(this.clientWidth),
+        -random(this.clientHeight / 3, 50),
+        this.colors.length
+          ? this.getRandomStyle(random(1, 0.5))
+          : [`hsla(${this.nextRainbowHue++ % 360}, 100%, 50%, ${random(1, 0.75)})`]
+      ))
+
+    // Draw & update particles, remove if no longer visible
     for (const particle of this.particles) {
       particle.drawAndUpdate(this.gravity)
       if (!this.isVisible(particle))
         this.particles.delete(particle)
     }
 
-    // Refill the particles set
-    for (let i = this.particles.size; i < this.count; i++)
-      this.particles.add(new Particle(
-        this.context,
-        random(this.clientWidth),
-        -random(this.clientHeight / 3, 50),
-        // Show rainbow confetti if non is given
-        this.colors.length
-          ? this.getRandomStyle(random(1, 0.5))
-          : [`hsla(${this.nextRainbowHue++ % 360}, 1, .5, ${random(1, 0.75)})`]
-      ))
-
     Particle.waveAngle += 0.01
-    if (this.particles.size)
+    if (this.particles.size && !this.hidden)
       requestAnimationFrame(this.draw)
   }
 

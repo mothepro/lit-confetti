@@ -25,3 +25,9 @@
 | `count` | `number` | Limit for the max amount of confetti papers to create at once |
 | `gradient` | `boolean` | Confetti papers will have a gradient between 2 colors set |
 | `colors` | `string[]`<br/> *`#RRGGBB` color format* |  Possible colors to choose from when generating a confetti paper.<br/> *By default rainbow colors are used.* |
+
+
+TODO...
+
++ add [tests](https://dev.to/open-wc/testing-workflow-for-web-components-g73)
++ check if it's worth it to [Schedule updates to occur just before the next frame](https://lit-element.polymer-project.org/api/classes/_lib_updating_element_.updatingelement.html#performupdate).

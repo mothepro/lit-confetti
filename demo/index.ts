@@ -1,5 +1,5 @@
-import '..'
 import { LitElement, html, customElement, property } from 'lit-element'
+import '..'
 
 type HTMLEvent<T = HTMLInputElement> = Event & { target: T }
 
@@ -45,7 +45,7 @@ export default class extends LitElement {
     ${this.colors.map((color, i) => html`
       <input
         type=color
-        @change=${({ target }: HTMLEvent<HTMLInputElement>) => this.colors = [...this.colors.slice(0, i), target.value, ...this.colors.slice(i + 1)]}
+        @change=${({ target }: HTMLEvent) => this.colors = [...this.colors.slice(0, i), target.value, ...this.colors.slice(i + 1)]}
         value=${color}
       />
       <button
