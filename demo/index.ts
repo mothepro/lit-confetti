@@ -1,4 +1,4 @@
-import 'lit-confetti'
+import '..'
 import { LitElement, html, customElement, property } from 'lit-element'
 
 type HTMLEvent<T = HTMLInputElement> = Event & { target: T }

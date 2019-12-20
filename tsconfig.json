@@ -18,7 +18,5 @@
       "es2019",
       "dom"
     ]
-  },
-  "files": ["index.ts"],
-  "include": ["test"]
+  }
 }
