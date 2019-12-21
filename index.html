@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Lit Confetti Demo</title>
+  <script type="module-dev" src="index.ts"></script>
+  <script type="module-dev" src="//unpkg.com/es-module-shims@0.4.6/dist/es-module-shims.min.js?module"></script>
+  <script type="module-shim" src="//unpkg.com/lit-confetti/dist/esm/demo/index.js"></script>
+  <script type="importmap-shim" src="import-map.json"></script>
+  <style>
+    body {
+      background-color: aliceblue;
+    }
+
+    h1 {
+      text-align: center
+    }
+
+    .offshoot {
+      border: thin solid black;
+      background-color: rgba(255, 255, 255, 0.75);
+      position: absolute;
+      right: 50px;
+      top: 150px;
+      width: 500px;
+      height: 500px;
+      max-width: 50%;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Check out this stylish confetti!</h1>
+  <confetti-controller gravity=1 count=100></confetti-controller>
+  <confetti-controller
+    class="offshoot"
+    colors='["#6b8e23", "#ffc0cb", "#add8e6", "#ee82ee", "#98fb98", "#f4a460", "#d2691e", "#ffd700", "#6a5acd", "#dc143c", "#1e90ff", "#4682b4"]'>
+  </confetti-controller>
+</body>
+
+</html>
