@@ -79,6 +79,13 @@ export default class extends LitElement {
   private draw = () => {
     this.context.clearRect(0, 0, this.clientWidth, this.clientHeight)
 
+    // Draw & update particles, remove if no longer visible
+    for (const particle of this.particles) {
+      particle.drawAndUpdate(this.gravity)
+      if (!this.isVisible(particle))
+        this.particles.delete(particle)
+    }
+
     // Refill particles
     for (let i = this.particles.size; i < this.count; i++)
       this.particles.add(new Particle(
@@ -89,13 +96,6 @@ export default class extends LitElement {
           ? this.getRandomStyle(random(1, 0.5))
           : [`hsla(${this.nextRainbowHue++ % 360}, 100%, 50%, ${random(1, 0.75)})`]
       ))
-
-    // Draw & update particles, remove if no longer visible
-    for (const particle of this.particles) {
-      particle.drawAndUpdate(this.gravity)
-      if (!this.isVisible(particle))
-        this.particles.delete(particle)
-    }
 
     Particle.waveAngle += 0.01
     if (this.particles.size && !this.hidden)
