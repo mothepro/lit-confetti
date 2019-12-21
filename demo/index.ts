@@ -1,5 +1,5 @@
 import { LitElement, html, customElement, property } from 'lit-element'
-import '..'
+import '../index.js'
 
 type HTMLEvent<T = HTMLInputElement> = Event & { target: T }
 
