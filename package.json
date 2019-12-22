@@ -14,7 +14,7 @@
   "repository": "https://github.com/mothepro/lit-confetti",
   "scripts": {
     "test": "echo 'no tests'",
-    "start": "es-dev-server --file-extensions .ts --babel --node-resolve --watch --app-index demo/index.html --root demo --open",
+    "start": "es-dev-server --node-resolve --watch --app-index demo/index.html --root demo --open",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:npm": "tsc",
     "build": "npm run build:npm && npm run build:esm",
@@ -31,9 +31,6 @@
     "release": "np"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/plugin-proposal-decorators": "^7.7.4",
-    "@babel/preset-typescript": "^7.7.7",
     "@types/mocha": "^5.2.7",
     "@types/should-sinon": "^0.0.5",
     "es-dev-server": "^1.32.0",
